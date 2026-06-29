@@ -10,6 +10,7 @@ body {
   color: var(--text-normal);
   display: flex;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   transition: background-color var(--transition-speed), color var(--transition-speed);
   -webkit-font-smoothing: antialiased;
