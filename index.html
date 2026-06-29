@@ -110,12 +110,31 @@
 
             <div class="chat-container" id="exam-chat-messages">
               <div class="message assistant">
-                <p>Привет! Я твой интерактивный экзаменатор. Я прочитаю текущую статью и подготовлю для тебя 3 практических вопроса. Когда будешь готов начать проверку, нажми кнопку ниже.</p>
+                <p>Привет! Я твой интерактивный экзаменатор. Я прочитаю текущую статью и подготовлю для тебя вопросы для проверки знаний. Когда будешь готов начать, нажми кнопку ниже.</p>
               </div>
             </div>
 
             <div class="interaction-area">
-              <button id="start-exam-btn" class="action-btn start-btn">Начать интерактивный экзамен</button>
+              
+              <div id="exam-setup-fields" class="settings-content" style="margin-bottom: 15px;">
+                <label for="exam-mode-select">Режим общения:</label>
+                <select id="exam-mode-select" class="theme-select">
+                  <option value="consultation">Консультация (вопросы и разъяснения)</option>
+                  <option value="exam">Экзамен (тестирование знаний)</option>
+                </select>
+
+                <div id="exam-questions-count-group" class="hidden" style="display: flex; flex-direction: column; gap: 8px;">
+                  <label for="exam-questions-select" style="margin-top: 5px; display: block;">Количество вопросов:</label>
+                  <select id="exam-questions-select" class="theme-select">
+                    <option value="3">3 вопроса</option>
+                    <option value="5">5 вопросов</option>
+                    <option value="10">10 вопросов</option>
+                    <option value="auto">Оптимально (выберет нейросеть)</option>
+                  </select>
+                </div>
+              </div>
+
+              <button id="start-exam-btn" class="action-btn start-btn">Начать общение</button>
               
               <div id="interactive-inputs" class="input-form hidden">
                 <textarea id="student-answer-input" placeholder="Напишите ваш подробный ответ своими словами... (Ctrl + Enter для отправки)" rows="3"></textarea>

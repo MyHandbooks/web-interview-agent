@@ -2,7 +2,6 @@ import {
 	getApiKey,
 	saveApiKey,
 	getProvider,
-	saveProvider,
 	getSelectedModel,
 	saveSelectedModel,
 	fetchModels,
@@ -10,6 +9,7 @@ import {
 	prepareExam,
 	sendExamMessage,
 	clearExamHistory,
+	setExamParams,
 } from './ai-examiner.js'
 
 const keyWarning = document.getElementById('ai-key-warning')
@@ -30,6 +30,12 @@ const sendAnswerBtn = document.getElementById('send-answer-btn')
 const examChatMessages = document.getElementById('exam-chat-messages')
 const examStatus = document.getElementById('exam-status')
 const resetExamBtn = document.getElementById('reset-exam-btn')
+
+const examModeSelect = document.getElementById('exam-mode-select')
+const examQuestionsCountGroup = document.getElementById(
+	'exam-questions-count-group',
+)
+const examQuestionsSelect = document.getElementById('exam-questions-select')
 
 let allLoadedModels = []
 
@@ -92,8 +98,7 @@ function populateModelDropdown() {
 	if (filtered.length === 0) {
 		const opt = document.createElement('option')
 		opt.value = ''
-		opt.textContent = 'Модели не найдены'
-		modelSelect.appendChild(opt)
+		opt.textContent = 'Models Not Found'
 		return
 	}
 
@@ -123,18 +128,50 @@ function populateModelDropdown() {
 	}
 }
 
+function updateWelcomeMessage() {
+	const mode = examModeSelect.value
+	if (mode === 'consultation') {
+		examQuestionsCountGroup.classList.add('hidden')
+		startExamBtn.textContent = 'Начать консультацию'
+		examChatMessages.innerHTML = `
+			<div class="message assistant">
+				<p>Привет! Я твой личный ментор по веб-разработке. Я подробно изучу текущую статью и помогу тебе во всём разобраться. Ты сможешь задать мне любые вопросы, попросить объяснить сложные термины или привести примеры кода. Когда будешь готов, нажми кнопку ниже.</p>
+			</div>
+		`
+		studentAnswerInput.placeholder =
+			'Напишите ваш вопрос или уточнение... (Ctrl + Enter для отправки)'
+		examStatus.textContent = 'Готов к началу консультации'
+	} else {
+		examQuestionsCountGroup.classList.remove('hidden')
+		startExamBtn.textContent = 'Начать экзамен'
+		const count =
+			examQuestionsSelect.value === 'auto'
+				? 'оптимальное количество'
+				: examQuestionsSelect.value
+		examChatMessages.innerHTML = `
+			<div class="message assistant">
+				<p>Привет! Я твой интерактивный экзаменатор. Я прочитаю текущую статью и подготовлю для тебя вопросы (выбранный режим: <b>${count}</b>) для проверки знаний. Тебе нужно будет отвечать своими словами. Когда будешь готов начать, нажми кнопку ниже.</p>
+			</div>
+		`
+		studentAnswerInput.placeholder =
+			'Напишите ваш подробный ответ своими словами... (Ctrl + Enter для отправки)'
+		examStatus.textContent = 'Готов к началу экзамена'
+	}
+}
+
 export function resetExamUI() {
 	clearExamHistory()
-	examChatMessages.innerHTML = `
-    <div class="message assistant">
-      <p>Привет! Я твой интерактивный экзаменатор. Я прочитаю текущую статью и подготовлю для тебя 3 практических вопроса. Когда будешь готов начать проверку, нажми кнопку ниже.</p>
-    </div>
-  `
+
+	const examSetupFields = document.getElementById('exam-setup-fields')
+	if (examSetupFields) {
+		examSetupFields.classList.remove('hidden')
+	}
+
+	updateWelcomeMessage()
+
 	startExamBtn.classList.remove('hidden')
 	startExamBtn.disabled = false
-	startExamBtn.textContent = 'Начать интерактивный экзамен'
 	interactiveInputs.classList.add('hidden')
-	examStatus.textContent = 'Готов к началу проверки знаний'
 }
 
 apiModelSearch.addEventListener('input', populateModelDropdown)
@@ -143,6 +180,9 @@ freeOnlyCheckbox.addEventListener('change', populateModelDropdown)
 modelSelect.addEventListener('change', () => {
 	saveSelectedModel(modelSelect.value)
 })
+
+examModeSelect.addEventListener('change', updateWelcomeMessage)
+examQuestionsSelect.addEventListener('change', updateWelcomeMessage)
 
 saveKeyBtn.addEventListener('click', async () => {
 	const key = apiKeyInput.value.trim()
@@ -186,17 +226,27 @@ providerSelect.addEventListener('change', () => {
 startExamBtn.addEventListener('click', async () => {
 	const route = getCurrentRoute()
 	if (!route) {
-		alert('Выберите статью перед началом экзамена.')
+		alert('Выберите статью перед началом.')
 		return
 	}
 
+	const mode = examModeSelect.value
+	const count = examQuestionsSelect.value
+	setExamParams(mode, count)
+
 	startExamBtn.disabled = true
-	startExamBtn.textContent = 'Изучаю материал...'
-	examStatus.textContent = 'Экзаменатор читает статью...'
+	startExamBtn.textContent =
+		mode === 'consultation'
+			? 'Готовлюсь к консультации...'
+			: 'Изучаю материал...'
+	examStatus.textContent =
+		mode === 'consultation'
+			? 'Ментор читает статью...'
+			: 'Экзаменатор читает статью...'
 
 	const ready = await prepareExam(route.category, route.articleName)
 	if (!ready) {
-		alert('Ошибка при подготовке материала для экзамена.')
+		alert('Ошибка при подготовке материала.')
 		resetExamUI()
 		return
 	}
@@ -205,9 +255,16 @@ startExamBtn.addEventListener('click', async () => {
 		const firstMessage = await sendExamMessage()
 		examChatMessages.innerHTML = ''
 		appendMessage('assistant', firstMessage)
+
+		const examSetupFields = document.getElementById('exam-setup-fields')
+		if (examSetupFields) {
+			examSetupFields.classList.add('hidden')
+		}
+
 		startExamBtn.classList.add('hidden')
 		interactiveInputs.classList.remove('hidden')
-		examStatus.textContent = 'Экзамен в процессе'
+		examStatus.textContent =
+			mode === 'consultation' ? 'Консультация в процессе' : 'Экзамен в процессе'
 	} catch (error) {
 		alert(error.message)
 		resetExamUI()
@@ -223,7 +280,10 @@ async function submitAnswer() {
 
 	studentAnswerInput.disabled = true
 	sendAnswerBtn.disabled = true
-	examStatus.textContent = 'Экзаменатор анализирует ответ...'
+	examStatus.textContent =
+		examModeSelect.value === 'consultation'
+			? 'Ментор анализирует сообщение...'
+			: 'Экзаменатор анализирует ответ...'
 
 	try {
 		const response = await sendExamMessage(answer)
@@ -251,7 +311,7 @@ studentAnswerInput.addEventListener('keydown', e => {
 resetExamBtn.addEventListener('click', () => {
 	if (
 		confirm(
-			'Вы уверены, что хотите прервать текущий экзамен? Весь прогресс будет потерян.',
+			'Вы уверены, что хотите прервать текущую сессию? Весь прогресс будет потерян.',
 		)
 	) {
 		resetExamUI()
@@ -273,3 +333,5 @@ function appendMessage(sender, text) {
 	examChatMessages.appendChild(messageDiv)
 	examChatMessages.scrollTop = examChatMessages.scrollHeight
 }
+
+updateWelcomeMessage()

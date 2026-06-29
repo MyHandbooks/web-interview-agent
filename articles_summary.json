@@ -1,0 +1,42 @@
+{
+	"js": {
+		"1. Подключение скриптов": "Атрибуты async и defer, блокировка парсера HTML, модульные скрипты, DOMContentLoaded.",
+		"2. Переменные и области видимости": "Области видимости let, const и var, поднятие (hoisting), временная мертвая зона (TDZ), лексическое окружение, замыкания в циклах.",
+		"3. Типы данных и приведение типов": "Примитивы и объекты, typeof, явное и неявное приведение типов (ToBoolean, ToNumber), строгое и нестрогое сравнение.",
+		"4. Основы функций": "Function Declaration, Function Expression, стрелочные функции, параметры по умолчанию, rest/spread параметры, передача по значению и ссылке.",
+		"5. Замыкания и лексическое окружение": "Замыкания, внутреннее свойство [[Environment]], утечки памяти, жизненный цикл переменных.",
+		"6. Строгий режим use strict": "Директива use strict, запрет неявного создания глобальных переменных, поведение this, заморозка объектов.",
+		"7. Основы работы с объектами": "Литералы, дескрипторы (writable, enumerable, configurable), цепочка прототипов, деструктуризация, глубокое и поверхностное копирование.",
+		"8. Контекст вызова и ключевое слово this": "Динамический контекст,this в стрелочных функциях, методы привязки call, apply, bind, потеря контекста в колбэках.",
+		"9. Классы и объектно-ориентированное программирование": "Классы как синтаксический сахар прототипов, extends, super, статические методы, инкапсуляция, приватные поля (#), геттеры и сеттеры.",
+		"10. Стандартные структуры данных": "Массивы (мутирующие и немутирующие методы, ES2023), структуры Map, Set, объекты Math, Date, сериализация JSON.",
+		"11. Введение в DOM и BOM": "Объекты window, document, BOM (location, navigator, history), типы DOM-узлов, навигация по дереву, методы поиска querySelector и NodeList.",
+		"12. События и их обработка в DOM": "addEventListener, объект Event, фазы погружения, цели и всплытия, предотвращение действий по умолчанию, делегирование событий, CustomEvent.",
+		"13. Работа с формами и валидация": "Элементы формы, события focus/blur, input/change, Constraint Validation API, ValidityState, предотвращение перезагрузки при submit.",
+		"14. Планирование задач и таймеры": "setTimeout, setInterval, рекурсивный setTimeout против setInterval, задержка таймеров, сборка мусора и утечки памяти.",
+		"15. Промисы и методы Promise": "Конструктор Promise, resolve/reject, цепочки промисов, методы Promise.all, Promise.allSettled, Promise.any, Promise.race.",
+		"16. Асинхронность и конструкция async-await": "Конструкция async/await, неблокирующее выполнение, обработка ошибок try/catch, оператор throw, класс Error.",
+		"17. Событийный цикл Event Loop": "Однопоточность, Call Stack, Web APIs, очередь макрозадач (setTimeout), очередь микрозадач (promises), фаза Render, чанкование тяжелых задач.",
+		"18. Хранение данных в браузере": "Same-Origin Policy, localStorage против sessionStorage, сериализация объектов в строки, лимиты памяти, обработка QuotaExceededError."
+	},
+	"angular": {
+		"1. Фреймворк Angular и настройка окружения": "Экосистема, Node.js, npm, package.json, package-lock.json, SemVer, переход к standalone-компонентам, JIT и AOT компиляция, angular.json.",
+		"10. Внедрение зависимостей и сервисы (DI)": "Иерархия инжекторов (EnvironmentInjector, ElementInjector), provideIn: root, функция inject(), типы провайдеров, InjectionToken, декораторы @Optional, @Self, @SkipSelf, @Host.",
+		"11. Продвинутые операторы RxJS и управление потоками": "Creation и Pipeable операторы, Join Creation (combineLatest, forkJoin, merge, concat), преобразования высшего порядка (switchMap, mergeMap, concatMap, exhaustMap), Cold против Hot Observables, shareReplay.",
+		"12. Маршрутизация и ленивая загрузка (Routing & Guards)": "Конфигурация роутера, RouterOutlet, RouterLink, pathMatch: full/prefix, ленивая загрузка loadComponent/loadChildren, функциональные гарды (CanMatch, CanActivate, CanDeactivate), withComponentInputBinding().",
+		"13. Директивы, пайпы и UI-библиотеки": "Атрибутные и структурные директивы, ElementRef и Renderer2, чистые (pure) и нечистые (impure) пайпы, AsyncPipe, Angular CDK, порталы, оверлеи.",
+		"14. Сетевые протоколы и основы взаимодействия (HTTP & REST)": "Протоколы HTTP/HTTPS, SSL/TLS, структура пакетов, семантика методов (Safe, Idempotent, GET, POST, PUT, PATCH, DELETE), статус-коды (1xx-5xx), условное кэширование, ETag.",
+		"15. Работа с API и HttpClient в Angular": "provideHttpClient(), проксирование (proxy.conf.json), environments, HttpParams, функциональные интерцепторы (HttpInterceptorFn), обработка ошибок и retry.",
+		"16. Интеграция с GraphQL": "Графовая модель данных, отличия от REST, over-fetching и under-fetching, Query, Mutation, Subscription, Apollo Client в Angular, InMemoryCache, нормализация кэша.",
+		"17. Постоянные соединения (WebSockets & SSE)": "Server-Sent Events (SSE) против WebSockets, EventSource на клиенте, WebSocketSubject в RxJS, управление жизненным циклом и соединением, обход прокси.",
+		"18. Безопасность, Аутентификация и авторизация": "Аутентификация против авторизации, Session-based против Token-based, структура JWT (Header, Payload, Signature), OAuth 2.0, OIDC, SSO, функциональный CanActivateFn, обновление токена (Refresh Token).",
+		"2. Основы TypeScript и типы данных": "Явная и неявная типизация, any против unknown, void, null, undefined, числовые и строковые перечисления (Enum), Union, Intersection, литеральные типы.",
+		"3. Классы, интерфейсы и утилиты в TypeScript": "Модификаторы public, private, protected, readonly, абстрактные классы, интерфейсы, утилиты типизации (Partial, Required, Readonly, Pick, Omit, Record).",
+		"4. Анатомия Angular-компонента и шаблоны": "Декоратор @Component, SCSS в Angular, переменные, вложенность, миксины, типы привязки данных, новый Control Flow (@if, @for, @switch) и его преимущества.",
+		"5. Взаимодействие компонентов в Angular": "Входные свойства (Inputs) через сигналы input(), выходные свойства (Outputs) через output(), шаблонные запросы viewChild(), обмен данными в иерархии.",
+		"6. Введение в реактивное программирование и RxJS": "Разница между Observable и Promise, Observer, Subscription, классификация Subject, BehaviorSubject, ReplaySubject, связывание через AsyncPipe.",
+		"7. Жизненный цикл компонента Angular": "Хуки OnInit, OnChanges, DoCheck, AfterContentInit, AfterViewInit, OnDestroy, проекция контента через ng-content и селекторы.",
+		"8. Механизм Change Detection и Zone.js": "Принцип работы Zone.js, стратегии Default и OnPush, триггеры обновления OnPush, класс ChangeDetectorRef (markForCheck, detectChanges), переход к Zoneless.",
+		"9. Реактивность с использованием Signals": "Сигналы WritableSignal, computed, linkedSignal (из Angular 20), эффекты effect(), un-tracked чтение, сравнение с RxJS и интероперабельность (toSignal, toObservable)."
+	}
+}
